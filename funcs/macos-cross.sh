@@ -35,10 +35,6 @@ function get_xcode_dir()
 
 function configure_mac_compilers()
 {
-	if [ "${OS}" != "Darwin" ]; then
-		return
-	fi
-
 	local xcode_dir="$(get_xcode_dir)"
 	export CC="${xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang"
 	export CXX="${xcode_dir}/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++"
@@ -46,10 +42,6 @@ function configure_mac_compilers()
 
 function detect_mac_arch_flags()
 {
-	if [ "${OS}" != "Darwin" ]; then
-		return
-	fi
-
 	local xcode_dir="$(get_xcode_dir)"
 	local sdksettings_path="${xcode_dir}/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist"
 	local architectures="$(plutil -extract SupportedTargets.macosx.Archs json -o - "${sdksettings_path}")"
