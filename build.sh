@@ -30,6 +30,9 @@ set -o pipefail
 # load version info
 . version.sh
 
+# macos specific functions
+. funcs/macos-cross.sh
+
 platform=$(uname -s)
 
 if [ -d build ]; then
@@ -101,10 +104,10 @@ else
   if [ "$platform" = "Darwin" ]; then
     # set minimum version of macOS to 10.13
     export MACOSX_DEPLOYMENT_TARGET="10.13"
+    export MACOS_TARGET="10.13"
     # https://www.gnu.org/software/bash/manual/html_node/Compilers-and-Options.html
-    export CC="gcc -std=c89 -Wno-implicit-function-declaration -Wno-return-type -target x86_64-apple-macos10.12"
-    # set up build for universal binrary
-    cp -rv bash-${bash_version} bash-${bash_version}-arm
+    export CFLAGS="-std=c89 -Wno-implicit-function-declaration -Wno-return-type $(detect_mac_arch_flags)"
+    configure_mac_compilers
   fi
 fi
 
@@ -117,17 +120,8 @@ make tests
 popd # bash-${bash_version}
 
 if [ "$platform" = "Darwin" ]; then
-  # build for Apple Silicon and then create a universal binary
-  pushd bash-${bash_version}-arm
-  export CC="gcc -std=c89 -Wno-implicit-function-declaration -Wno-return-type -target arm64-apple-macos11"
-  CFLAGS="$CFLAGS -Os" ./configure --without-bash-malloc
-  make
-  make tests
-  popd
-
-  # merge into universal binary
-  mv bash-${bash_version}/bash bash-${bash_version}/bash-x86_64
-  lipo -create -output bash-${bash_version}/bash bash-${bash_version}/bash-x86_64 bash-${bash_version}-arm/bash
+  # check binary arch
+  lipo -detailed_info bash-${version}/bash
 fi
 
 
