@@ -121,7 +121,7 @@ popd # bash-${bash_version}
 
 if [ "$platform" = "Darwin" ]; then
   # check binary arch
-  lipo -detailed_info bash-${version}/bash
+  lipo -detailed_info bash-${bash_version}/bash
 fi
 
 
