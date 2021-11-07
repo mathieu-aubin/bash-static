@@ -105,9 +105,16 @@ else
     # set minimum version of macOS to 10.13
     export MACOSX_DEPLOYMENT_TARGET="10.13"
     export MACOS_TARGET="10.13"
-    # https://www.gnu.org/software/bash/manual/html_node/Compilers-and-Options.html
-    export CFLAGS="-std=c89 -Wno-implicit-function-declaration -Wno-return-type $(detect_mac_arch_flags)"
+    
+    # configure for universal binaries
+    # https://www.gnu.org/software/autoconf/manual/autoconf-2.69/html_node/Multiple-Architectures.html
     configure_mac_compilers
+    export C_CMP="${CC}"
+    export CXX_CMP="${CXX}"
+    export CC="${CC} -std=c89 -Wno-implicit-function-declaration -Wno-return-type $(detect_mac_arch_flags)"
+    export CXX="${CXX} -std=c89 -Wno-implicit-function-declaration -Wno-return-type $(detect_mac_arch_flags)"
+    export CPP="${C_CMP} -E"
+    export CXXCPP="${CXX_CMP} -E"
   fi
 fi
 
