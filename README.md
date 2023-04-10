@@ -25,12 +25,12 @@ ADD bash
 ENTRYPOINT ['/bash']
 ```
 
-Adding in busybox would make the container relatively feature-complete
+Adding in [busybox](https://git.busybox.net/busybox/) would make the container relatively feature-complete
 for debugging or just for common tools. This works great with a
-container image that has busybox (i.e `progrium/busybox`).
+container image that has busybox (i.e. [progrium/busybox](https://github.com/progrium/busybox)).
 
 If you're not going for purely static minimalism, you can achieve a similar
-result just by using Alpine today, also discovered during this experiment in 2015.
+result just by using [Alpine](https://alpinelinux.org) today, also discovered during this experiment in 2015.
 
 ## License
 
